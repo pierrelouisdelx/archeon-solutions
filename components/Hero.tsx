@@ -92,13 +92,13 @@ export default function Hero() {
 
   const imageVariants = {
     enter: { opacity: 0, scale: 1.08 },
-    center: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] } },
+    center: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] as const } },
     exit: { opacity: 0, scale: 0.98, transition: { duration: 0.5 } },
   };
 
   const textVariants = {
     enter: (dir: number) => ({ opacity: 0, y: dir > 0 ? 40 : -40 }),
-    center: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] } },
+    center: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] as const } },
     exit: (dir: number) => ({ opacity: 0, y: dir > 0 ? -30 : 30, transition: { duration: 0.3 } }),
   };
 
