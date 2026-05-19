@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { Eye, Brain, HeartPulse, Cpu, Microscope, BarChart3 } from "lucide-react";
 

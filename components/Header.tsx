@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
@@ -21,7 +23,10 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNavClick = (e, href) => {
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLElement>,
+    href: string
+  ) => {
     e.preventDefault();
     setMobileOpen(false);
     const el = document.querySelector(href);

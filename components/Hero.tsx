@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
@@ -48,7 +50,7 @@ const slides = [
 export default function Hero() {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(1);
-  const intervalRef = useRef(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const startAutoplay = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
@@ -60,7 +62,9 @@ export default function Hero() {
 
   useEffect(() => {
     startAutoplay();
-    return () => clearInterval(intervalRef.current);
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
   }, [startAutoplay]);
 
   const goTo = useCallback(

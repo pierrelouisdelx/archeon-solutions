@@ -7,7 +7,7 @@ import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 
-function App() {
+export default function Home() {
   return (
     <div className="App">
       <Header />
