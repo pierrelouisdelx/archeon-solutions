@@ -1,114 +1,218 @@
-'use client';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
-import { ArrowRight, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
+const slides = [
+  {
+    id: 1,
+    title: "Hyperspectral Intelligence",
+    subtitle: "Heavy Metal Detection via Earth Observation",
+    description:
+      "Pioneering analysis of hyperspectral satellite imagery to detect and map heavy metal contamination across vast terrains with unprecedented accuracy.",
+    tag: "REMOTE SENSING",
+    image:
+      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    id: 2,
+    title: "Super-Resolution AI",
+    subtitle: "Diffusion Models for CT Scan Enhancement",
+    description:
+      "Custom diffusion architectures achieving state-of-the-art super-resolution and denoising on medical CT scans, enabling earlier and more precise diagnostics.",
+    tag: "MEDICAL IMAGING",
+    image:
+      "https://images.unsplash.com/photo-1666214280250-41f16ba24a26?auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    id: 3,
+    title: "Live Endometriosis Detection",
+    subtitle: "Real-Time Surgical Video Analysis",
+    description:
+      "SOTA deep learning models deployed for real-time intraoperative detection of endometriosis lesions during laparoscopic surgery.",
+    tag: "HEALTHCARE AI",
+    image:
+      "https://images.unsplash.com/photo-1757152962882-6bf8495b324d?auto=format&fit=crop&w=1920&q=80",
+  },
+  {
+    id: 4,
+    title: "DeepSeek V3 Inference",
+    subtitle: "World Record Performance Optimization",
+    description:
+      "Achieved world-record inference speeds on DeepSeek V3 through custom kernel optimization, quantization strategies, and distributed systems engineering.",
+    tag: "LLM OPTIMIZATION",
+    image:
+      "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1920&q=80",
+  },
+];
 
-export function Hero() {
-    const scrollToContact = () => {
-        const element = document.getElementById('contact');
-        element?.scrollIntoView({ behavior: 'smooth' });
-    };
+export default function Hero() {
+  const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const intervalRef = useRef(null);
 
-    return (
-        <div className='relative min-h-screen flex items-center justify-center overflow-hidden pt-16'>
-            {/* Background Image with Overlay */}
-            <div className='absolute inset-0 z-0'>
-                <Image
-                    src='https://images.unsplash.com/photo-1655393001768-d946c97d6fd1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmdXR1cmlzdGljJTIwdGVjaG5vbG9neSUyMEFJfGVufDF8fHx8MTc2MzY1NDczOHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral'
-                    alt='Futuristic AI Technology'
-                    className='w-full h-full object-cover'
-                    width={1000}
-                    height={1000}
+  const startAutoplay = useCallback(() => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      setDirection(1);
+      setCurrent((prev) => (prev + 1) % slides.length);
+    }, 6000);
+  }, []);
+
+  useEffect(() => {
+    startAutoplay();
+    return () => clearInterval(intervalRef.current);
+  }, [startAutoplay]);
+
+  const goTo = useCallback(
+    (index) => {
+      setDirection(index > current ? 1 : -1);
+      setCurrent(index);
+      startAutoplay();
+    },
+    [current, startAutoplay]
+  );
+
+  const goPrev = useCallback(() => {
+    setDirection(-1);
+    setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
+    startAutoplay();
+  }, [startAutoplay]);
+
+  const goNext = useCallback(() => {
+    setDirection(1);
+    setCurrent((prev) => (prev + 1) % slides.length);
+    startAutoplay();
+  }, [startAutoplay]);
+
+  const slide = slides[current];
+
+  const imageVariants = {
+    enter: { opacity: 0, scale: 1.08 },
+    center: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] } },
+    exit: { opacity: 0, scale: 0.98, transition: { duration: 0.5 } },
+  };
+
+  const textVariants = {
+    enter: (dir) => ({ opacity: 0, y: dir > 0 ? 40 : -40 }),
+    center: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] } },
+    exit: (dir) => ({ opacity: 0, y: dir > 0 ? -30 : 30, transition: { duration: 0.3 } }),
+  };
+
+  return (
+    <section
+      id="hero"
+      data-testid="hero-carousel"
+      className="relative w-full h-screen overflow-hidden bg-[#0A0A0A]"
+    >
+      {/* Background Images */}
+      <AnimatePresence mode="wait" custom={direction}>
+        <motion.div
+          key={slide.id}
+          custom={direction}
+          variants={imageVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          className="absolute inset-0"
+        >
+          <img
+            src={slide.image}
+            alt={slide.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="slide-overlay absolute inset-0" />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Content */}
+      <div className="relative z-10 h-full flex flex-col justify-end pb-24 md:pb-32">
+        <div className="max-w-7xl mx-auto px-6 w-full">
+          <AnimatePresence mode="wait" custom={direction}>
+            <motion.div
+              key={slide.id}
+              custom={direction}
+              variants={textVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              className="max-w-2xl"
+            >
+              <span
+                data-testid="hero-slide-tag"
+                className="font-mono text-xs tracking-[0.2em] text-[#2563EB] mb-4 block"
+              >
+                {slide.tag}
+              </span>
+              <h1
+                data-testid="hero-slide-title"
+                className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-3 leading-[1.1]"
+              >
+                {slide.title}
+              </h1>
+              <p
+                data-testid="hero-slide-subtitle"
+                className="font-heading text-lg md:text-xl text-white/80 font-medium mb-4"
+              >
+                {slide.subtitle}
+              </p>
+              <p
+                data-testid="hero-slide-description"
+                className="text-sm md:text-base text-white/60 leading-relaxed max-w-lg mb-8"
+              >
+                {slide.description}
+              </p>
+              <a
+                href="#contact"
+                data-testid="hero-cta-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="inline-flex items-center gap-2 bg-white text-[#0F172A] px-6 py-3 rounded-full text-sm font-semibold hover:bg-white/90 transition-colors"
+              >
+                Explore Project
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Slide indicators + navigation */}
+          <div className="flex items-center justify-between mt-12">
+            <div className="flex items-center gap-2" data-testid="carousel-indicators">
+              {slides.map((_, idx) => (
+                <button
+                  key={idx}
+                  data-testid={`carousel-dot-${idx}`}
+                  onClick={() => goTo(idx)}
+                  className={`carousel-dot rounded-full ${idx === current ? "active" : ""}`}
+                  aria-label={`Go to slide ${idx + 1}`}
                 />
-                <div className='absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-950/80 to-slate-950'></div>
+              ))}
             </div>
-
-            {/* Animated Grid Overlay */}
-            <div className='absolute inset-0 z-0 opacity-20'>
-                <div
-                    className='absolute inset-0'
-                    style={{
-                        backgroundImage: `linear-gradient(rgba(6, 182, 212, 0.2) 1px, transparent 1px),
-                           linear-gradient(90deg, rgba(6, 182, 212, 0.2) 1px, transparent 1px)`,
-                        backgroundSize: '50px 50px',
-                    }}
-                ></div>
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-xs text-white/50 mr-2">
+                {String(current + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
+              </span>
+              <button
+                data-testid="carousel-prev-btn"
+                onClick={goPrev}
+                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/50 transition-colors"
+                aria-label="Previous slide"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                data-testid="carousel-next-btn"
+                onClick={goNext}
+                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/50 transition-colors"
+                aria-label="Next slide"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
             </div>
-
-            {/* Content */}
-            <div className='relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center'>
-                <div className='inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-8'>
-                    <Sparkles className='w-4 h-4 text-cyan-400' />
-                    <span className='text-sm text-cyan-300'>
-                        Enterprise AI & Software Solutions
-                    </span>
-                </div>
-
-                <h1 className='mb-6 max-w-4xl mx-auto'>
-                    <span className='block'>Transforming Vision into</span>
-                    <span className='block bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent'>
-                        Intelligent Solutions
-                    </span>
-                </h1>
-
-                <p className='mb-8 max-w-2xl mx-auto text-slate-300'>
-                    Elite AI & software consulting powered by NVIDIA and Siemens
-                    Healthineers expertise. We deliver cutting-edge fullstack
-                    development, LLM optimization, and healthcare technology
-                    solutions.
-                </p>
-
-                <div className='flex flex-col sm:flex-row gap-4 justify-center items-center'>
-                    <Button
-                        onClick={scrollToContact}
-                        size='lg'
-                        className='bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 group'
-                    >
-                        Start Your Project
-                        <ArrowRight className='ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform' />
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            const element = document.getElementById('services');
-                            element?.scrollIntoView({ behavior: 'smooth' });
-                        }}
-                        size='lg'
-                        variant='outline'
-                        className='border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/10'
-                    >
-                        Explore Services
-                    </Button>
-                </div>
-
-                {/* Stats */}
-                <div className='mt-20 grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-3xl mx-auto'>
-                    <div className='p-6 rounded-lg bg-slate-900/50 border border-cyan-500/20 backdrop-blur-sm'>
-                        <div className='bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent'>
-                            Fortune 500
-                        </div>
-                        <p className='text-sm text-slate-400 mt-2'>
-                            Enterprise Experience
-                        </p>
-                    </div>
-                    <div className='p-6 rounded-lg bg-slate-900/50 border border-cyan-500/20 backdrop-blur-sm'>
-                        <div className='bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent'>
-                            Healthcare AI
-                        </div>
-                        <p className='text-sm text-slate-400 mt-2'>
-                            Deep Specialization
-                        </p>
-                    </div>
-                    <div className='p-6 rounded-lg bg-slate-900/50 border border-cyan-500/20 backdrop-blur-sm'>
-                        <div className='bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent'>
-                            LLM Experts
-                        </div>
-                        <p className='text-sm text-slate-400 mt-2'>
-                            Optimization Specialists
-                        </p>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-    );
+      </div>
+    </section>
+  );
 }

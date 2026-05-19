@@ -1,121 +1,112 @@
-import { Code, Layers, Brain, Sparkles } from 'lucide-react';
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { motion } from "framer-motion";
+import { Eye, Brain, HeartPulse, Cpu, Microscope, BarChart3 } from "lucide-react";
 
-export function Services() {
-    const services = [
-        {
-            icon: Brain,
-            title: 'AI & Machine Learning',
-            description:
-                'Custom AI solutions, LLM optimization, and neural network development powered by enterprise-grade expertise.',
-            features: [
-                'LLM Fine-tuning',
-                'Model Optimization',
-                'AI Integration',
-                'Predictive Analytics',
-            ],
-            gradient: 'from-cyan-500 to-blue-600',
-        },
-        {
-            icon: Layers,
-            title: 'Fullstack Development',
-            description:
-                'End-to-end software solutions with modern architectures, scalable infrastructure, and seamless deployment.',
-            features: [
-                'React & Node.js',
-                'Cloud Architecture',
-                'API Development',
-                'Database Design',
-            ],
-            gradient: 'from-blue-500 to-purple-600',
-        },
-        {
-            icon: Code,
-            title: 'Software Development',
-            description:
-                'Enterprise-grade software engineering with best practices, clean code, and maintainable architectures.',
-            features: [
-                'Custom Software',
-                'System Integration',
-                'Code Audits',
-                'Technical Consulting',
-            ],
-            gradient: 'from-purple-500 to-pink-600',
-        },
-    ];
+const services = [
+  {
+    icon: Eye,
+    title: "Computer Vision",
+    description:
+      "From object detection to image segmentation, we build production-grade vision systems for industrial, medical, and earth observation applications.",
+    span: "md:col-span-2",
+  },
+  {
+    icon: Brain,
+    title: "LLM Optimization",
+    description:
+      "Inference acceleration, quantization, and distributed deployment strategies that push language models to their performance limits.",
+    span: "md:col-span-1",
+  },
+  {
+    icon: HeartPulse,
+    title: "Healthcare AI",
+    description:
+      "FDA-aware AI solutions for diagnostics, surgical assistance, and medical imaging that meet the highest standards of clinical reliability.",
+    span: "md:col-span-1",
+  },
+  {
+    icon: Microscope,
+    title: "Hyperspectral Analysis",
+    description:
+      "Advanced spectral imaging pipelines for earth observation, mineral detection, and environmental monitoring at scale.",
+    span: "md:col-span-1",
+  },
+  {
+    icon: Cpu,
+    title: "MLOps & Deployment",
+    description:
+      "End-to-end ML infrastructure: from experiment tracking and model registry to scalable inference endpoints and monitoring.",
+    span: "md:col-span-1",
+  },
+  {
+    icon: BarChart3,
+    title: "Research & Development",
+    description:
+      "Cutting-edge research partnerships. We collaborate with institutions to bring novel AI methods from paper to production.",
+    span: "md:col-span-2",
+  },
+];
 
-    return (
-        <section
-            id='services'
-            className='py-24 px-4 sm:px-6 lg:px-8 bg-slate-950 relative'
+const fadeInUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, delay: i * 0.08, ease: [0.25, 0.46, 0.45, 0.94] },
+  }),
+};
+
+export default function Services() {
+  return (
+    <section
+      id="services"
+      data-testid="services-section"
+      className="py-24 md:py-32 bg-white"
+    >
+      <div className="max-w-7xl mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.5 }}
+          className="mb-16"
         >
-            {/* Background Effects */}
-            <div className='absolute inset-0 overflow-hidden'>
-                <div className='absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl'></div>
-                <div className='absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl'></div>
-            </div>
+          <span className="font-mono text-xs tracking-[0.2em] text-[#2563EB] uppercase mb-4 block">
+            What We Do
+          </span>
+          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0F172A] mb-4">
+            Our Services
+          </h2>
+          <p className="text-base text-[#475569] max-w-xl">
+            We deliver end-to-end AI solutions from research through deployment,
+            specializing in domains where precision is non-negotiable.
+          </p>
+        </motion.div>
 
-            <div className='container mx-auto relative z-10'>
-                <div className='text-center mb-16'>
-                    <div className='inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-6'>
-                        <Sparkles className='w-4 h-4 text-cyan-400' />
-                        <span className='text-sm text-cyan-300'>
-                            Our Services
-                        </span>
-                    </div>
-                    <h2 className='mb-4'>
-                        <span className='bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent'>
-                            Comprehensive Technology Solutions
-                        </span>
-                    </h2>
-                    <p className='text-slate-400 max-w-2xl mx-auto'>
-                        From concept to deployment, we provide end-to-end
-                        technology services tailored to your business needs.
-                    </p>
-                </div>
-
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-                    {services.map((service, index) => (
-                        <Card
-                            key={index}
-                            className='bg-slate-900/50 border-cyan-500/20 backdrop-blur-sm hover:border-cyan-500/40 transition-all duration-300 group'
-                        >
-                            <CardHeader>
-                                <div
-                                    className={`w-12 h-12 rounded-lg bg-gradient-to-br ${service.gradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}
-                                >
-                                    <service.icon className='w-6 h-6 text-white' />
-                                </div>
-                                <CardTitle className='text-white'>
-                                    {service.title}
-                                </CardTitle>
-                                <CardDescription className='text-slate-400'>
-                                    {service.description}
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <ul className='space-y-2'>
-                                    {service.features.map((feature, idx) => (
-                                        <li
-                                            key={idx}
-                                            className='flex items-center gap-2 text-sm text-slate-300'
-                                        >
-                                            <div className='w-1.5 h-1.5 rounded-full bg-cyan-400'></div>
-                                            {feature}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {services.map((service, i) => (
+            <motion.div
+              key={service.title}
+              custom={i}
+              variants={fadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              data-testid={`service-card-${i}`}
+              className={`service-card ${service.span} bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-8 group`}
+            >
+              <div className="w-11 h-11 rounded-lg bg-[#0F172A] flex items-center justify-center mb-5 group-hover:bg-[#2563EB] transition-colors duration-300">
+                <service.icon className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="font-heading text-lg font-semibold text-[#0F172A] mb-2">
+                {service.title}
+              </h3>
+              <p className="text-sm text-[#475569] leading-relaxed">
+                {service.description}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
