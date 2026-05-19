@@ -68,7 +68,7 @@ export default function Hero() {
   }, [startAutoplay]);
 
   const goTo = useCallback(
-    (index) => {
+    (index: number) => {
       setDirection(index > current ? 1 : -1);
       setCurrent(index);
       startAutoplay();
@@ -97,9 +97,9 @@ export default function Hero() {
   };
 
   const textVariants = {
-    enter: (dir) => ({ opacity: 0, y: dir > 0 ? 40 : -40 }),
+    enter: (dir: number) => ({ opacity: 0, y: dir > 0 ? 40 : -40 }),
     center: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] } },
-    exit: (dir) => ({ opacity: 0, y: dir > 0 ? -30 : 30, transition: { duration: 0.3 } }),
+    exit: (dir: number) => ({ opacity: 0, y: dir > 0 ? -30 : 30, transition: { duration: 0.3 } }),
   };
 
   return (
