@@ -3,7 +3,16 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 
-const projects = [
+type Project = {
+  tag: string;
+  title: string;
+  description: string;
+  metrics: string[];
+  image?: string;
+  video?: string;
+};
+
+const projects: Project[] = [
   {
     tag: "REMOTE SENSING",
     title: "Hyperspectral Heavy Metal Detection",
@@ -17,10 +26,10 @@ const projects = [
     tag: "MEDICAL IMAGING",
     title: "CT Scan Super-Resolution & Denoising",
     description:
-      "Developed a novel diffusion-based architecture for simultaneous super-resolution (4x) and denoising of low-dose CT scans, enabling diagnostic-quality images from 75% reduced radiation exposure.",
+      "Developed a novel diffusion-based architecture for simultaneo  us super-resolution (4x) and denoising of low-dose CT scans, enabling diagnostic-quality images from 75% reduced radiation exposure.",
     metrics: ["4x upscale", "75% dose reduction", "PSNR 38.7dB"],
     image:
-      "https://images.unsplash.com/photo-1666214280250-41f16ba24a26?auto=format&fit=crop&w=800&q=80",
+      "/images/denoising.webp",
   },
   {
     tag: "HEALTHCARE AI",
@@ -28,8 +37,7 @@ const projects = [
     description:
       "Deployed a real-time computer vision system for laparoscopic surgery that identifies endometriosis lesions with sub-100ms latency, assisting surgeons during live procedures.",
     metrics: ["< 100ms latency", "91.8% sensitivity", "Real-time"],
-    image:
-      "https://images.unsplash.com/photo-1757152962882-6bf8495b324d?auto=format&fit=crop&w=800&q=80",
+    video: "/videos/endometryosis.mp4",
   },
   {
     tag: "LLM OPTIMIZATION",
@@ -79,12 +87,24 @@ export default function CaseStudies() {
               data-testid={`case-study-card-${i}`}
               className="group bg-white rounded-xl border border-[#E2E8F0] overflow-hidden hover:shadow-lg transition-shadow duration-300"
             >
-              <div className="relative h-52 overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
+              <div className="relative h-52 overflow-hidden bg-[#0F172A]">
+                {project.video ? (
+                  <video
+                    src={project.video}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    aria-label={project.title}
+                  />
+                ) : (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                )}
                 <div className="absolute top-4 left-4">
                   <span className="font-mono text-[10px] tracking-[0.15em] bg-white/90 backdrop-blur-sm text-[#0F172A] px-3 py-1.5 rounded-full">
                     {project.tag}
