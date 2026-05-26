@@ -3,13 +3,17 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-const institutions = [
-  { name: "UC Berkeley", src: "/logos/berkeley.svg", height: 56 },
-  { name: "Harvard University", src: "/logos/harvard.svg", height: 56 },
-  { name: "University College London", src: "/logos/ucl.svg", height: 56 },
-];
+type Institution = {
+  id: string | number;
+  name: string;
+  logoUrl: string;
+  height: number;
+};
 
-export default function AcademicAffiliations() {
+type Props = { institutions: Institution[] };
+
+export default function AcademicAffiliations({ institutions }: Props) {
+  if (!institutions.length) return null;
   return (
     <section
       id="academic-affiliations"
@@ -46,12 +50,12 @@ export default function AcademicAffiliations() {
         >
           {institutions.map((inst) => (
             <div
-              key={inst.name}
+              key={inst.id}
               className="flex items-center justify-center opacity-80 hover:opacity-100 transition-opacity duration-300"
               style={{ height: inst.height }}
             >
               <Image
-                src={inst.src}
+                src={inst.logoUrl}
                 alt={inst.name}
                 width={240}
                 height={inst.height}

@@ -2,41 +2,32 @@
 
 import { motion } from "framer-motion";
 
-const team = [
-  {
-    name: "Pierre-Louis Delcroix",
-    role: "LLM Engineering",
-    bio: "Production ML across healthcare and fintech. World-record LLM inference at 303 tokens/sec on DeepSeek R1. ML research on diffusion models for CT imaging at Siemens Healthineers.",
-    initials: "PLD",
-  },
-  {
-    name: "Théo Bonzi",
-    role: "Computer Vision Engineering",
-    bio: "Ex-UC Berkeley research, published in astronomical ML. Edge OCR architect—10× faster inference on CPU-only hardware. Real-time medical ultrasound AI and generative vision from R&D to production.",
-    initials: "TB",
-  },
-  {
-    name: "August Weinbren",
-    role: "Medical ML Engineering",
-    bio: "Doctoral researcher at UCL. ML engineer on radiotherapy optimization and medical image registration at Siemens Healthineers. LLM inference specialist with CUDA, TensorRT, and speculative decoding.",
-    initials: "AW",
-  },
-  {
-    name: "Jessup Jong",
-    role: "Geospatial AI & Remote Sensing",
-    bio: "Deep learning engineer leading applied research and performance benchmarking. Computer vision on satellite imagery for geospatial asset tracking. Former ML engineer at Upstage building LLM systems and data-driven products.",
-    initials: "JJ",
-  },
-];
+type TeamMember = {
+  id: string | number;
+  name: string;
+  role: string;
+  bio: string;
+  initials?: string;
+};
+type Stat = { value: string; label: string };
 
-const stats = [
-  { value: "10+", label: "Projects Delivered" },
-  { value: "2", label: "Research Papers" },
-  { value: "1", label: "World Record" },
-  { value: "100%", label: "Client Retention" },
-];
+type Props = {
+  team: TeamMember[];
+  stats: Stat[];
+  heading?: string;
+  body?: string;
+};
 
-export default function About() {
+const defaultHeading = (
+  <>
+    Research-Grade AI, <span className="text-[#2563EB]">Production-Ready</span>
+  </>
+);
+
+const defaultBody =
+  "Archeon Solutions was founded on the belief that the gap between research and production is where the most valuable work happens. Our team combines deep academic expertise with battle-tested engineering to deliver AI systems that perform at the frontier of what's possible.";
+
+export default function About({ team, stats, heading, body }: Props) {
   return (
     <section
       id="about"
@@ -44,7 +35,6 @@ export default function About() {
       className="py-24 md:py-32 bg-white"
     >
       <div className="max-w-7xl mx-auto px-6">
-        {/* About Header */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -56,8 +46,7 @@ export default function About() {
               About Us
             </span>
             <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0F172A] mb-6">
-              Research-Grade AI,{" "}
-              <span className="text-[#2563EB]">Production-Ready</span>
+              {heading ?? defaultHeading}
             </h2>
           </motion.div>
           <motion.div
@@ -68,16 +57,11 @@ export default function About() {
             className="flex items-end"
           >
             <p className="text-base text-[#475569] leading-relaxed">
-              Archeon Solutions was founded on the belief that the gap between
-              research and production is where the most valuable work happens.
-              Our team combines deep academic expertise with battle-tested
-              engineering to deliver AI systems that perform at the frontier
-              of what's possible.
+              {body ?? defaultBody}
             </p>
           </motion.div>
         </div>
 
-        {/* Stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -100,7 +84,6 @@ export default function About() {
           ))}
         </motion.div>
 
-        {/* Team */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -112,15 +95,14 @@ export default function About() {
             Leadership Team
           </h3>
           <p className="text-sm text-[#475569]">
-            World-class researchers and engineers united by a passion for
-            impactful AI.
+            World-class researchers and engineers united by a passion for impactful AI.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {team.map((member, i) => (
             <motion.div
-              key={member.name}
+              key={member.id}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}

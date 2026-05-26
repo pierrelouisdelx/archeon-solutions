@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Archeon Solutions — archeon.ai
 
-## Getting Started
+Marketing site, project case studies, and engineering blog, built on Next.js 16 (App Router) + Payload CMS.
 
-First, run the development server:
+## Quickstart (local)
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+cp .env.example .env       # default values already match the docker-compose Postgres
+pnpm install
+pnpm db:up                 # start Postgres in Docker (port 5432)
+pnpm migrate               # create tables
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Other DB scripts: `pnpm db:down` (stop), `pnpm db:reset` (drop volume + restart).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Visit:
+- http://localhost:3000 — public site
+- http://localhost:3000/admin — Payload admin (first visit creates the admin user)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To seed the marketing content (projects, team, services, logos, testimonials, homepage stats) from the existing copy in `lib/fallbacks.ts`:
 
-## Learn More
+```bash
+pnpm seed
+```
 
-To learn more about Next.js, take a look at the following resources:
+The seed is idempotent — re-running is safe.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Next.js 16** App Router, React Server Components, ISR with on-demand revalidation.
+- **Payload CMS 3** — admin at `/admin`, REST at `/api`, GraphQL at `/api/graphql`.
+- **Postgres** via `@payloadcms/db-postgres`.
+- **Lexical** rich text with custom blocks: Quote, CodeBlock, ImageBlock, Callout, Embed.
+- **Plugins**: `seo`, `redirects`, `nested-docs`, `search`. Optional `vercel-blob` storage when `BLOB_READ_WRITE_TOKEN` is set.
+- **SEO**: per-page `generateMetadata`, dynamic `sitemap.ts` / `robots.ts` / `manifest.ts`, RSS at `/feed.xml`, dynamic OG images at `/og/{type}/{slug}`, JSON-LD (`Organization`, `WebSite`, `Article`, `CreativeWork`, `BreadcrumbList`).
 
-## Deploy on Vercel
+## Routes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Path | Purpose |
+| --- | --- |
+| `/` | Marketing single-page (CMS-driven sections + fallbacks) |
+| `/projects` | Project index |
+| `/projects/[slug]` | Project detail |
+| `/blog` | Article index, paginated |
+| `/blog/[slug]` | Article detail |
+| `/blog/category/[slug]` | Category archive |
+| `/sitemap.xml`, `/robots.txt`, `/manifest.webmanifest`, `/feed.xml` | SEO / discovery |
+| `/og/{type}/{slug}` | Dynamic 1200×630 social card |
+| `/admin` | Payload CMS |
+| `/api/preview`, `/api/exit-preview` | Draft preview |
+| `/api/revalidate` | On-demand revalidation webhook (POST with `x-revalidate-secret`) |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Environment
+
+| Variable | Notes |
+| --- | --- |
+| `DATABASE_URI` | Postgres connection string |
+| `PAYLOAD_SECRET` | 32+ random chars |
+| `NEXT_PUBLIC_SERVER_URL` | Public base URL — used by SEO and Payload |
+| `REVALIDATION_SECRET` | Auth for `/api/revalidate` |
+| `BLOB_READ_WRITE_TOKEN` | Optional — enables Vercel Blob media storage |
+
+## Scripts
+
+| Script | Purpose |
+| --- | --- |
+| `pnpm dev` | Next.js dev server |
+| `pnpm build` / `pnpm start` | Production build / serve |
+| `pnpm payload` | Direct Payload CLI |
+| `pnpm migrate` / `pnpm migrate:create` | Run / create Postgres migrations |
+| `pnpm generate:types` | Regenerate `payload-types.ts` from the schema |
+| `pnpm seed` | Populate the CMS with the marketing fallback content |

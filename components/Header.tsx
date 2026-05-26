@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import Image from "next/image";
 
 const navLinks = [
   { label: "Services", href: "#services" },
@@ -42,7 +44,7 @@ export default function Header() {
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
-        <a
+        <Link
           href="#hero"
           data-testid="nav-logo"
           className="flex items-center gap-3"
@@ -51,13 +53,11 @@ export default function Header() {
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
         >
-          <div className={`w-8 h-8 flex items-center justify-center ${scrolled ? 'bg-[#0F172A]' : 'bg-white'} rounded-sm`}>
-            <span className={`font-heading font-bold text-base ${scrolled ? 'text-white' : 'text-[#0F172A]'}`}>A</span>
-          </div>
+          <Image src="/logo.svg" alt="Archeon Solutions" width={32} height={32} />
           <span className={`font-heading font-bold text-lg tracking-tight ${scrolled ? "text-[#0F172A]" : "text-white"}`}>
             Archeon Solutions
           </span>
-        </a>
+        </Link>
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8">

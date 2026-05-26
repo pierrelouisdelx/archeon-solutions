@@ -3,31 +3,18 @@
 import { motion } from "framer-motion";
 import { Quote } from "lucide-react";
 
-const testimonials = [
-  {
-    quote:
-      "Archeon's hyperspectral analysis pipeline transformed our environmental monitoring program. Their team delivered accuracy levels we didn't think were achievable with satellite data alone.",
-    author: "Dr. Elena Vasquez",
-    role: "Director of Environmental Sciences",
-    company: "GeoWatch International",
-  },
-  {
-    quote:
-      "The super-resolution model they built for our CT imaging division has meaningfully reduced radiation exposure for patients while maintaining diagnostic quality. Genuinely groundbreaking work.",
-    author: "Prof. James Whitfield",
-    role: "Chief of Radiology",
-    company: "Nordic Medical Institute",
-  },
-  {
-    quote:
-      "Working with Archeon on inference optimization was a revelation. They found performance gains our internal team had missed for months, ultimately achieving results that set an industry benchmark.",
-    author: "Kai Nakamura",
-    role: "VP of Infrastructure",
-    company: "Nexus AI Labs",
-  },
-];
+type Testimonial = {
+  id: string | number;
+  quote: string;
+  author: string;
+  role?: string;
+  company?: string;
+};
 
-export default function Testimonials() {
+type Props = { testimonials: Testimonial[] };
+
+export default function Testimonials({ testimonials }: Props) {
+  if (!testimonials.length) return null;
   return (
     <section
       id="testimonials"
@@ -56,7 +43,7 @@ export default function Testimonials() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((t, i) => (
             <motion.div
-              key={t.author}
+              key={t.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
@@ -67,7 +54,7 @@ export default function Testimonials() {
               <div>
                 <Quote className="w-8 h-8 text-[#2563EB]/40 mb-5" />
                 <p className="text-sm md:text-base text-white/80 leading-relaxed mb-8">
-                  "{t.quote}"
+                  &ldquo;{t.quote}&rdquo;
                 </p>
               </div>
               <div>
@@ -76,7 +63,9 @@ export default function Testimonials() {
                   {t.author}
                 </p>
                 <p className="text-xs text-white/40 mt-0.5">
-                  {t.role}, {t.company}
+                  {t.role}
+                  {t.role && t.company ? ", " : ""}
+                  {t.company}
                 </p>
               </div>
             </motion.div>

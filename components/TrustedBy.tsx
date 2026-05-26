@@ -3,13 +3,17 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-const clients = [
-  { name: "Siemens Healthineers", src: "/logos/siemens-healthineers.svg", height: 36 },
-  { name: "NVIDIA", src: "/logos/nvidia.svg", height: 28 },
-  { name: "Avian", src: "/logos/avian.svg", height: 32 },
-];
+type Client = {
+  id: string | number;
+  name: string;
+  logoUrl: string;
+  height: number;
+};
 
-export default function TrustedBy() {
+type Props = { clients: Client[] };
+
+export default function TrustedBy({ clients }: Props) {
+  if (!clients.length) return null;
   return (
     <section
       id="trusted-by"
@@ -41,12 +45,12 @@ export default function TrustedBy() {
         >
           {clients.map((c) => (
             <div
-              key={c.name}
+              key={c.id}
               className="flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity duration-300"
               style={{ height: c.height }}
             >
               <Image
-                src={c.src}
+                src={c.logoUrl}
                 alt={c.name}
                 width={200}
                 height={c.height}

@@ -1,52 +1,38 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Eye, Brain, HeartPulse, Cpu, Microscope, BarChart3 } from "lucide-react";
+import {
+  Eye,
+  Brain,
+  HeartPulse,
+  Cpu,
+  Microscope,
+  BarChart3,
+  Sparkles,
+  Layers,
+  type LucideIcon,
+} from "lucide-react";
 
-const services = [
-  {
-    icon: Eye,
-    title: "Computer Vision",
-    description:
-      "From object detection to image segmentation, we build production-grade vision systems for industrial, medical, and earth observation applications.",
-    span: "md:col-span-2",
-  },
-  {
-    icon: Brain,
-    title: "LLM Optimization",
-    description:
-      "Inference acceleration, quantization, and distributed deployment strategies that push language models to their performance limits.",
-    span: "md:col-span-1",
-  },
-  {
-    icon: HeartPulse,
-    title: "Healthcare AI",
-    description:
-      "FDA-aware AI solutions for diagnostics, surgical assistance, and medical imaging that meet the highest standards of clinical reliability.",
-    span: "md:col-span-1",
-  },
-  {
-    icon: Microscope,
-    title: "Hyperspectral Analysis",
-    description:
-      "Advanced spectral imaging pipelines for earth observation, mineral detection, and environmental monitoring at scale.",
-    span: "md:col-span-1",
-  },
-  {
-    icon: Cpu,
-    title: "MLOps & Deployment",
-    description:
-      "End-to-end ML infrastructure: from experiment tracking and model registry to scalable inference endpoints and monitoring.",
-    span: "md:col-span-1",
-  },
-  {
-    icon: BarChart3,
-    title: "Research & Development",
-    description:
-      "Cutting-edge research partnerships. We collaborate with institutions to bring novel AI methods from paper to production.",
-    span: "md:col-span-2",
-  },
-];
+const iconMap: Record<string, LucideIcon> = {
+  Eye,
+  Brain,
+  HeartPulse,
+  Cpu,
+  Microscope,
+  BarChart3,
+  Sparkles,
+  Layers,
+};
+
+type Service = {
+  id: string | number;
+  title: string;
+  summary: string;
+  icon: string;
+  span: string;
+};
+
+type Props = { services: Service[] };
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 24 },
@@ -57,7 +43,7 @@ const fadeInUp = {
   }),
 };
 
-export default function Services() {
+export default function Services({ services }: Props) {
   return (
     <section
       id="services"
@@ -85,28 +71,31 @@ export default function Services() {
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {services.map((service, i) => (
-            <motion.div
-              key={service.title}
-              custom={i}
-              variants={fadeInUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-60px" }}
-              data-testid={`service-card-${i}`}
-              className={`service-card ${service.span} bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-8 group`}
-            >
-              <div className="w-11 h-11 rounded-lg bg-[#0F172A] flex items-center justify-center mb-5 group-hover:bg-[#2563EB] transition-colors duration-300">
-                <service.icon className="w-5 h-5 text-white" />
-              </div>
-              <h3 className="font-heading text-lg font-semibold text-[#0F172A] mb-2">
-                {service.title}
-              </h3>
-              <p className="text-sm text-[#475569] leading-relaxed">
-                {service.description}
-              </p>
-            </motion.div>
-          ))}
+          {services.map((service, i) => {
+            const Icon = iconMap[service.icon] ?? Sparkles;
+            return (
+              <motion.div
+                key={service.id}
+                custom={i}
+                variants={fadeInUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-60px" }}
+                data-testid={`service-card-${i}`}
+                className={`service-card ${service.span} bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-8 group`}
+              >
+                <div className="w-11 h-11 rounded-lg bg-[#0F172A] flex items-center justify-center mb-5 group-hover:bg-[#2563EB] transition-colors duration-300">
+                  <Icon className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="font-heading text-lg font-semibold text-[#0F172A] mb-2">
+                  {service.title}
+                </h3>
+                <p className="text-sm text-[#475569] leading-relaxed">
+                  {service.summary}
+                </p>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
