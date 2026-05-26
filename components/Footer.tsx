@@ -58,9 +58,6 @@ export default function Footer() {
           <p className="text-xs text-white/25">
             &copy; {new Date().getFullYear()} Archeon Solutions. All rights reserved.
           </p>
-          <p className="font-mono text-[10px] text-white/15 tracking-wider">
-            BUILT WITH PRECISION
-          </p>
         </div>
       </div>
     </footer>

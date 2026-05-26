@@ -75,7 +75,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <p className="text-sm font-medium text-[#0F172A]">Email</p>
-                  <p className="text-sm text-[#475569]">contact@archeon.ai</p>
+                  <p className="text-sm text-[#475569]">contact@archeon.solutions</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">

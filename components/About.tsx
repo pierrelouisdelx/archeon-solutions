@@ -4,28 +4,28 @@ import { motion } from "framer-motion";
 
 const team = [
   {
-    name: "Dr. Sarah Chen",
-    role: "Chief Scientist",
-    bio: "Former Google DeepMind researcher. PhD in Computer Vision from ETH Zurich. 15+ publications in top-tier venues.",
-    initials: "SC",
+    name: "Pierre-Louis Delcroix",
+    role: "LLM Engineering",
+    bio: "Production ML across healthcare and fintech. World-record LLM inference at 303 tokens/sec on DeepSeek R1. ML research on diffusion models for CT imaging at Siemens Healthineers.",
+    initials: "PLD",
   },
   {
-    name: "Marcus Reiter",
-    role: "Head of Engineering",
-    bio: "Ex-NVIDIA. Specialist in GPU kernel optimization and distributed inference systems. Led DeepSeek V3 optimization.",
-    initials: "MR",
+    name: "Théo Bonzi",
+    role: "Computer Vision Engineering",
+    bio: "Ex-UC Berkeley research, published in astronomical ML. Edge OCR architect—10× faster inference on CPU-only hardware. Real-time medical ultrasound AI and generative vision from R&D to production.",
+    initials: "TB",
   },
   {
-    name: "Dr. Amira Patel",
-    role: "Healthcare AI Lead",
-    bio: "MD/PhD from Johns Hopkins. Bridges clinical medicine and AI research. Leads our surgical AI programs.",
-    initials: "AP",
+    name: "August Weinbren",
+    role: "Medical ML Engineering",
+    bio: "Doctoral researcher at UCL. ML engineer on radiotherapy optimization and medical image registration at Siemens Healthineers. LLM inference specialist with CUDA, TensorRT, and speculative decoding.",
+    initials: "AW",
   },
   {
-    name: "Lucas Fernandez",
-    role: "Remote Sensing Lead",
-    bio: "ESA alumnus. Expert in hyperspectral image processing and earth observation with 10 years of domain experience.",
-    initials: "LF",
+    name: "Jessup Jong",
+    role: "Geospatial AI & Remote Sensing",
+    bio: "Deep learning engineer leading applied research and performance benchmarking. Computer vision on satellite imagery for geospatial asset tracking. Former ML engineer at Upstage building LLM systems and data-driven products.",
+    initials: "JJ",
   },
 ];
 

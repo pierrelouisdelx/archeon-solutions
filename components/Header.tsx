@@ -55,7 +55,7 @@ export default function Header() {
             <span className={`font-heading font-bold text-base ${scrolled ? 'text-white' : 'text-[#0F172A]'}`}>A</span>
           </div>
           <span className={`font-heading font-bold text-lg tracking-tight ${scrolled ? "text-[#0F172A]" : "text-white"}`}>
-            Archeon
+            Archeon Solutions
           </span>
         </a>
 
