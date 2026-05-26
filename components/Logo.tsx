@@ -19,7 +19,7 @@ export default function Logo({ variant = "light", className }: LogoProps) {
       viewBox="0 0 290 292"
       className={cn(
         "h-12 w-12 shrink-0 transition-colors duration-300",
-        variant === "dark" ? "text-[#0F172A]" : "text-white",
+        variant === "dark" ? "text-ink" : "text-bone",
         className
       )}
     >

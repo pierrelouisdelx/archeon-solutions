@@ -2,17 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Menu, X, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import Logo from "@/components/Logo";
 
 const navLinks = [
-  { label: "Services", href: "#services" },
-  { label: "Case Studies", href: "#case-studies" },
-  { label: "About", href: "#about" },
-  { label: "Testimonials", href: "#testimonials" },
-  { label: "Contact", href: "#contact" },
+  { label: "Capabilities", href: "#services" },
+  { label: "Industries", href: "#industries" },
+  { label: "Work", href: "#case-studies" },
+  { label: "Team", href: "#about" },
 ];
 
 export default function Header() {
@@ -20,15 +18,13 @@ export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 32);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNavClick = (
-    e: React.MouseEvent<HTMLElement>,
-    href: string
-  ) => {
+  const handleNavClick = (e: React.MouseEvent<HTMLElement>, href: string) => {
     e.preventDefault();
     setMobileOpen(false);
     const el = document.querySelector(href);
@@ -42,90 +38,98 @@ export default function Header() {
         scrolled ? "nav-scrolled py-3" : "bg-transparent py-5"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        {/* Logo */}
+      <div className="max-w-[88rem] mx-auto px-6 md:px-10 flex items-center justify-between">
+        {/* Logo + wordmark */}
         <Link
           href="#hero"
           data-testid="nav-logo"
-          className="flex items-center gap-3"
+          className="flex items-center gap-3 group"
           onClick={(e) => {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
         >
-          <Logo variant={scrolled ? "dark" : "light"} />
-          <span className={`font-heading font-bold text-lg tracking-tight ${scrolled ? "text-[#0F172A]" : "text-white"}`}>
-            Archeon Solutions
+          <Logo variant="light" className="h-8 w-8 text-bone" />
+          <span className="hidden sm:flex flex-col leading-none">
+            <span className="font-display text-base text-bone">Archeon</span>
+            <span className="font-mono text-[0.625rem] tracking-[0.22em] uppercase text-bone-dim mt-0.5">
+              Solutions
+            </span>
           </span>
         </Link>
 
-        {/* Desktop Links */}
+        {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              data-testid={`nav-link-${link.label.toLowerCase().replace(/\s/g, "-")}`}
+              data-testid={`nav-link-${link.label.toLowerCase()}`}
               onClick={(e) => handleNavClick(e, link.href)}
-              className={`text-sm font-medium transition-colors hover:opacity-100 ${
-                scrolled ? "text-[#475569] hover:text-[#0F172A]" : "text-white/70 hover:text-white"
-              }`}
+              className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone-dim hover:text-bone transition-colors"
             >
               {link.label}
             </a>
           ))}
-          <Button
-            data-testid="nav-cta-btn"
-            onClick={(e) => handleNavClick(e, "#contact")}
-            className="bg-[#2563EB] hover:bg-[#1d4ed8] text-white rounded-full px-6 h-9 text-sm font-medium"
-          >
-            Get in Touch
-          </Button>
         </div>
 
-        {/* Mobile Menu Toggle */}
+        <div className="hidden md:block">
+          <a
+            href="#contact"
+            data-testid="nav-cta-btn"
+            onClick={(e) => handleNavClick(e, "#contact")}
+            className="group inline-flex items-center gap-2 border border-ink-3 px-4 h-10 text-sm text-bone hover:border-signal hover:text-signal transition-colors"
+          >
+            Book intro call
+            <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </a>
+        </div>
+
+        {/* Mobile toggle */}
         <button
           data-testid="mobile-menu-toggle"
-          className="md:hidden"
+          className="md:hidden text-bone"
           onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label={mobileOpen ? "Close menu" : "Open menu"}
         >
-          {mobileOpen ? (
-            <X className={`w-6 h-6 ${scrolled ? "text-[#0F172A]" : "text-white"}`} />
-          ) : (
-            <Menu className={`w-6 h-6 ${scrolled ? "text-[#0F172A]" : "text-white"}`} />
-          )}
+          {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile drawer */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden bg-white border-t border-[#E2E8F0] px-6 py-6"
+            className="md:hidden absolute top-full left-0 right-0 bg-ink border-t border-ink-3"
             data-testid="mobile-menu"
           >
-            <div className="flex flex-col gap-4">
-              {navLinks.map((link) => (
-                <a
+            <div className="flex flex-col px-6 py-8 gap-1">
+              {navLinks.map((link, i) => (
+                <motion.a
                   key={link.href}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: i * 0.05 }}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className="text-[#0F172A] text-base font-medium"
+                  className="font-display text-3xl text-bone py-3 border-b border-ink-3"
                 >
                   {link.label}
-                </a>
+                </motion.a>
               ))}
-              <Button
-                data-testid="mobile-cta-btn"
+              <a
+                href="#contact"
                 onClick={(e) => handleNavClick(e, "#contact")}
-                className="bg-[#2563EB] hover:bg-[#1d4ed8] text-white rounded-full mt-2"
+                data-testid="mobile-cta-btn"
+                className="mt-6 inline-flex items-center justify-between bg-signal text-ink h-12 px-5 text-sm font-medium"
               >
-                Get in Touch
-              </Button>
+                Book intro call
+                <ArrowUpRight className="w-4 h-4" />
+              </a>
             </div>
           </motion.div>
         )}

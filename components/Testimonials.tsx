@@ -1,7 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Quote } from "lucide-react";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import Eyebrow from "@/components/ui/Eyebrow";
 
 type Testimonial = {
   id: string | number;
@@ -13,63 +15,80 @@ type Testimonial = {
 
 type Props = { testimonials: Testimonial[] };
 
+const ease = [0.2, 0.7, 0.1, 1] as const;
+
 export default function Testimonials({ testimonials }: Props) {
+  const [index, setIndex] = useState(0);
   if (!testimonials.length) return null;
+
+  const t = testimonials[index];
+  const total = testimonials.length;
+
+  const prev = () => setIndex((i) => (i - 1 + total) % total);
+  const next = () => setIndex((i) => (i + 1) % total);
+
   return (
     <section
       id="testimonials"
       data-testid="testimonials-section"
-      className="py-24 md:py-32 bg-[#0F172A]"
+      className="bg-ink-2 border-b border-ink-3"
     >
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5 }}
-          className="mb-16"
-        >
-          <span className="font-mono text-xs tracking-[0.2em] text-[#2563EB] uppercase mb-4 block">
-            Testimonials
+      <div className="max-w-[88rem] mx-auto px-6 md:px-10 py-24 md:py-32">
+        <div className="flex items-end justify-between gap-6 mb-12 flex-wrap">
+          <Eyebrow index="010" label="What partners say" />
+          <span className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone-dim">
+            {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </span>
-          <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Trusted by Leaders
-          </h2>
-          <p className="text-base text-white/50 max-w-xl">
-            What our partners and clients say about working with Archeon.
-          </p>
-        </motion.div>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonials.map((t, i) => (
-            <motion.div
+        <div className="relative">
+          <AnimatePresence mode="wait">
+            <motion.blockquote
               key={t.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              data-testid={`testimonial-card-${i}`}
-              className="bg-white/5 border border-white/10 rounded-xl p-8 flex flex-col justify-between hover:border-[#2563EB]/30 transition-colors duration-300"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.5, ease }}
+              className="max-w-5xl"
+              data-testid={`testimonial-card-${index}`}
             >
-              <div>
-                <Quote className="w-8 h-8 text-[#2563EB]/40 mb-5" />
-                <p className="text-sm md:text-base text-white/80 leading-relaxed mb-8">
-                  &ldquo;{t.quote}&rdquo;
-                </p>
-              </div>
-              <div>
-                <div className="w-full h-px bg-white/10 mb-5" />
-                <p className="font-heading text-sm font-semibold text-white">
-                  {t.author}
-                </p>
-                <p className="text-xs text-white/40 mt-0.5">
-                  {t.role}
-                  {t.role && t.company ? ", " : ""}
-                  {t.company}
-                </p>
-              </div>
-            </motion.div>
-          ))}
+              <p className="font-display text-3xl md:text-5xl lg:text-6xl text-bone leading-[1.08]">
+                <span className="text-signal mr-2">&ldquo;</span>
+                {t.quote}
+                <span className="text-signal ml-2">&rdquo;</span>
+              </p>
+              <footer className="mt-12 flex items-center gap-6">
+                <span className="block h-px w-12 bg-signal" />
+                <div>
+                  <div className="font-display text-xl text-bone">{t.author}</div>
+                  <div className="mt-1 font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone-dim">
+                    {t.role}
+                    {t.role && t.company ? " · " : ""}
+                    {t.company}
+                  </div>
+                </div>
+              </footer>
+            </motion.blockquote>
+          </AnimatePresence>
+        </div>
+
+        <div className="mt-16 flex items-center gap-3">
+          <button
+            type="button"
+            onClick={prev}
+            aria-label="Previous testimonial"
+            className="w-12 h-12 border border-ink-3 flex items-center justify-center text-bone-dim hover:text-signal hover:border-signal/60 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </button>
+          <button
+            type="button"
+            onClick={next}
+            aria-label="Next testimonial"
+            className="w-12 h-12 border border-ink-3 flex items-center justify-center text-bone-dim hover:text-signal hover:border-signal/60 transition-colors"
+          >
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
       </div>
     </section>

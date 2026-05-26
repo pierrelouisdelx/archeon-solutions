@@ -12,7 +12,7 @@ export const fallbackProjects = [
     summary:
       'Built a complete pipeline for processing hyperspectral satellite imagery to detect and quantify heavy metal contamination in soil across mining regions. Achieved 94.2% detection accuracy using custom spectral unmixing algorithms.',
     metrics: [{ value: '94.2% accuracy' }, { value: '12 spectral bands' }, { value: '50km² coverage' }],
-    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80',
   },
   {
     id: 'fb-2',
@@ -21,7 +21,7 @@ export const fallbackProjects = [
     title: 'CT Scan Super-Resolution & Denoising',
     summary:
       'Developed a novel diffusion-based architecture for simultaneous super-resolution (4x) and denoising of low-dose CT scans, enabling diagnostic-quality images from 75% reduced radiation exposure.',
-    metrics: [{ value: '4x upscale' }, { value: '75% dose reduction' }, { value: 'PSNR 38.7dB' }],
+    metrics: [{ value: '4× upscale' }, { value: '75% dose reduction' }, { value: 'PSNR 38.7dB' }],
     image: '/images/denoising.webp',
   },
   {
@@ -41,8 +41,8 @@ export const fallbackProjects = [
     title: 'DeepSeek V3 Inference World Record',
     summary:
       'Achieved world-record throughput on DeepSeek V3 through custom CUDA kernels, int4 quantization with minimal quality loss, and a novel tensor parallelism strategy across 8-GPU clusters.',
-    metrics: [{ value: 'World record' }, { value: '3.2x speedup' }, { value: '< 1% quality loss' }],
-    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80',
+    metrics: [{ value: 'World record' }, { value: '3.2× speedup' }, { value: '< 1% quality loss' }],
+    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1600&q=80',
   },
 ];
 
@@ -59,7 +59,7 @@ export const fallbackTeam = [
     name: 'Théo Bonzi',
     role: 'Computer Vision Engineering',
     initials: 'TB',
-    bio: 'Ex-UC Berkeley research, published in astronomical ML. Edge OCR architect—10× faster inference on CPU-only hardware. Real-time medical ultrasound AI and generative vision from R&D to production.',
+    bio: 'Ex-UC Berkeley research, published in astronomical ML. Edge OCR architect — 10× faster inference on CPU-only hardware. Real-time medical ultrasound AI and generative vision from R&D to production.',
   },
   {
     id: 'fb-aw',
@@ -73,29 +73,119 @@ export const fallbackTeam = [
     name: 'Jessup Jong',
     role: 'Geospatial AI & Remote Sensing',
     initials: 'JJ',
-    bio: 'Deep learning engineer leading applied research and performance benchmarking. Computer vision on satellite imagery for geospatial asset tracking. Former ML engineer at Upstage building LLM systems and data-driven products.',
+    bio: 'Deep learning engineer leading applied research and performance benchmarking. Computer vision on satellite imagery for geospatial asset tracking. Former ML engineer at Upstage building LLM systems.',
   },
 ];
 
 export const fallbackStats = [
-  { value: '10+', label: 'Projects Delivered' },
-  { value: '2', label: 'Research Papers' },
-  { value: '1', label: 'World Record' },
-  { value: '100%', label: 'Client Retention' },
+  { value: '1', label: 'World record · DeepSeek V3' },
+  { value: '4', label: 'PhDs & research alumni' },
+  { value: '10+', label: 'Tier-1 enterprise engagements' },
+  { value: '2', label: 'Offices · SF · Zürich' },
 ];
 
 export const fallbackServices = [
-  { id: 'fb-cv', icon: 'Eye', title: 'Computer Vision', summary: 'From object detection to image segmentation, we build production-grade vision systems for industrial, medical, and earth observation applications.', span: 'md:col-span-2' },
-  { id: 'fb-llm', icon: 'Brain', title: 'LLM Optimization', summary: 'Inference acceleration, quantization, and distributed deployment strategies that push language models to their performance limits.', span: 'md:col-span-1' },
-  { id: 'fb-hai', icon: 'HeartPulse', title: 'Healthcare AI', summary: 'FDA-aware AI solutions for diagnostics, surgical assistance, and medical imaging that meet the highest standards of clinical reliability.', span: 'md:col-span-1' },
-  { id: 'fb-mlo', icon: 'Cpu', title: 'MLOps & Deployment', summary: 'End-to-end ML infrastructure: from experiment tracking and model registry to scalable inference endpoints and monitoring.', span: 'md:col-span-1' },
-  { id: 'fb-rnd', icon: 'BarChart3', title: 'Research & Development', summary: 'Cutting-edge research partnerships. We collaborate with institutions to bring novel AI methods from paper to production.', span: 'md:col-span-3' },
+  {
+    id: 'fb-cv',
+    icon: 'Eye',
+    title: 'Computer Vision',
+    summary:
+      'Production-grade vision for medical, industrial and earth-observation. Detection, segmentation, super-resolution and real-time inference on the edge.',
+    span: 'md:col-span-2',
+  },
+  {
+    id: 'fb-llm',
+    icon: 'Brain',
+    title: 'LLM Engineering',
+    summary:
+      'On-prem and air-gapped LLMs. Custom kernels, quantization, speculative decoding — the work that took us to a world record on DeepSeek V3.',
+    span: 'md:col-span-2',
+  },
+  {
+    id: 'fb-hai',
+    icon: 'HeartPulse',
+    title: 'Healthcare AI',
+    summary:
+      'Clinical-grade models with regulatory awareness. Surgical assistance, imaging and diagnostics that meet hospital reliability bars.',
+    span: 'md:col-span-2',
+  },
+  {
+    id: 'fb-fin',
+    icon: 'BarChart3',
+    title: 'Finance AI',
+    summary:
+      'Risk, alpha research and document intelligence for banks and asset managers. Models that survive compliance, audit and stress.',
+    span: 'md:col-span-2',
+  },
+  {
+    id: 'fb-rnd',
+    icon: 'Microscope',
+    title: 'Research & Development',
+    summary:
+      'Frontier research turned into deployable systems. We co-author with Berkeley, Harvard and UCL — and ship what works to your stack.',
+    span: 'md:col-span-4',
+  },
+];
+
+export const fallbackIndustries = [
+  {
+    id: 'finance',
+    name: 'Banking & Finance',
+    tagline: 'Regulated · On-prem · Audited',
+    body:
+      'We build risk engines, on-prem LLM stacks and document-intelligence systems for tier-1 banks and asset managers. Auditable from training data to inference, deployed inside your perimeter — no third-party model APIs.',
+    metrics: [
+      { value: '60%', label: 'Manual review reduction' },
+      { value: '< 50ms', label: 'P99 inference latency' },
+      { value: '0', label: 'Data leaving perimeter' },
+    ],
+    partners: ['JP Morgan', 'Avian'],
+  },
+  {
+    id: 'healthcare',
+    name: 'Healthcare & Life Sciences',
+    tagline: 'Clinical-grade · Imaging · Surgical',
+    body:
+      'Imaging, surgical AI and diagnostic systems built to hospital reliability bars. We have shipped real-time intra-operative vision, CT super-resolution and registration pipelines with Siemens Healthineers and academic partners.',
+    metrics: [
+      { value: '4×', label: 'Resolution recovery' },
+      { value: '75%', label: 'Radiation dose reduction' },
+      { value: '< 100ms', label: 'Surgical inference loop' },
+    ],
+    partners: ['Siemens Healthineers', 'UCL', 'Harvard'],
+  },
+  {
+    id: 'industrial',
+    name: 'Industrial & Public Sector',
+    tagline: 'Earth obs · Sensors · Defense-adjacent',
+    body:
+      'Hyperspectral remote sensing, geospatial intelligence and edge vision for industrial operators and the public sector. From satellite to silicon — built where bandwidth is scarce and stakes are high.',
+    metrics: [
+      { value: '94.2%', label: 'Detection accuracy' },
+      { value: '50 km²', label: 'Single-pass coverage' },
+      { value: '12', label: 'Spectral bands fused' },
+    ],
+    partners: ['NVIDIA', 'Confidential'],
+  },
+  {
+    id: 'rnd',
+    name: 'R&D & Frontier Compute',
+    tagline: 'Inference · Kernels · Training infra',
+    body:
+      'When your bottleneck is compute, we go to the metal. Custom CUDA kernels, quantization, distributed inference and training infrastructure that compounds — not slideware. Open-source contributions where it serves the work.',
+    metrics: [
+      { value: '3.2×', label: 'Throughput vs. baseline' },
+      { value: '< 1%', label: 'Quality loss at int4' },
+      { value: '#1', label: 'World ranking · DeepSeek V3' },
+    ],
+    partners: ['NVIDIA', 'DeepSeek'],
+  },
 ];
 
 export const fallbackClients = [
-  { id: 'fb-siemens', name: 'Siemens Healthineers', logoUrl: '/logos/siemens-healthineers.svg', height: 36 },
-  { id: 'fb-nvidia', name: 'NVIDIA', logoUrl: '/logos/nvidia.svg', height: 28 },
-  { id: 'fb-avian', name: 'Avian', logoUrl: '/logos/avian.svg', height: 32 },
+  { id: 'fb-siemens', name: 'Siemens Healthineers', logoUrl: '/logos/siemens-healthineers.svg', height: 28 },
+  { id: 'fb-nvidia', name: 'NVIDIA', logoUrl: '/logos/nvidia.svg', height: 22 },
+  { id: 'fb-avian', name: 'Avian', logoUrl: '/logos/avian.svg', height: 26 },
 ];
 
 export const fallbackAffiliations = [

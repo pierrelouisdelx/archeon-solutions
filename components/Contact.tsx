@@ -2,43 +2,65 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Send, MapPin, Mail, ArrowUpRight } from "lucide-react";
-import { toast } from "sonner";
-import axios from "axios";
+import { ArrowRight, Mail, MapPin } from "lucide-react";
+import SectionHeader from "@/components/ui/SectionHeader";
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const verticals = [
+  "Banking & Finance",
+  "Healthcare & Life Sciences",
+  "Industrial / Public Sector",
+  "R&D / Frontier Compute",
+  "Other",
+];
+
+const ease = [0.2, 0.7, 0.1, 1] as const;
+
+const API_BASE =
+  process.env.NEXT_PUBLIC_BACKEND_URL || process.env.REACT_APP_BACKEND_URL || "";
 
 export default function Contact() {
   const [form, setForm] = useState({
     name: "",
     email: "",
     company: "",
+    vertical: verticals[0],
     message: "",
   });
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<
+    "idle" | "sending" | "sent" | "error"
+  >("idle");
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.message) {
-      toast.error("Please fill in all required fields.");
+      setStatus("error");
       return;
     }
-    setLoading(true);
+    setStatus("sending");
     try {
-      await axios.post(`${API}/contact`, form);
-      toast.success("Message sent successfully! We'll be in touch soon.");
-      setForm({ name: "", email: "", company: "", message: "" });
-    } catch (err) {
-      toast.error("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+      if (API_BASE) {
+        await fetch(`${API_BASE}/api/contact`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        });
+      }
+      setStatus("sent");
+      setForm({
+        name: "",
+        email: "",
+        company: "",
+        vertical: verticals[0],
+        message: "",
+      });
+    } catch {
+      setStatus("error");
     }
   };
 
@@ -46,153 +68,194 @@ export default function Contact() {
     <section
       id="contact"
       data-testid="contact-section"
-      className="py-24 md:py-32 bg-white"
+      className="bg-ink border-b border-ink-3"
     >
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          {/* Left */}
+      <div className="max-w-[88rem] mx-auto px-6 md:px-10 py-24 md:py-32">
+        <SectionHeader
+          index="011"
+          label="Engage"
+          title={
+            <>
+              Start with a <span className="italic">working session</span>.
+            </>
+          }
+          body="Bring a real problem. We bring a senior engineer and a scientist. 30 minutes — no slides, no qualifying call."
+        />
+
+        <div className="mt-16 md:mt-20 grid grid-cols-12 gap-x-6 gap-y-12 border-t border-ink-3 pt-16">
+          {/* Left — direct contact */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6, ease }}
+            className="col-span-12 lg:col-span-5 flex flex-col gap-10"
           >
-            <span className="font-mono text-xs tracking-[0.2em] text-[#2563EB] uppercase mb-4 block">
-              Contact
-            </span>
-            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-bold text-[#0F172A] mb-6">
-              Get in Touch
-            </h2>
-            <p className="text-base text-[#475569] leading-relaxed mb-10 max-w-md">
-              Have a project in mind or want to explore how AI can transform your
-              operations? We'd love to hear from you.
-            </p>
+            <a
+              href="mailto:contact@archeon.solutions"
+              className="group inline-flex items-center justify-between gap-6 border border-ink-3 px-6 py-7 hover:border-signal/60 transition-colors"
+            >
+              <div>
+                <div className="font-mono text-[0.6875rem] uppercase tracking-[0.22em] text-bone-dim">
+                  Direct line
+                </div>
+                <div className="mt-2 font-display text-2xl md:text-3xl text-bone group-hover:text-signal transition-colors">
+                  contact@archeon.solutions
+                </div>
+              </div>
+              <Mail className="w-5 h-5 text-bone-dim group-hover:text-signal transition-colors" />
+            </a>
 
-            <div className="space-y-5">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-lg bg-[#F1F5F9] flex items-center justify-center">
-                  <Mail className="w-4 h-4 text-[#475569]" />
+            <div className="grid grid-cols-2 gap-px bg-ink-3 border-y border-ink-3">
+              {[
+                { city: "San Francisco", note: "Engineering · Research" },
+                { city: "Zürich", note: "Client & Operations" },
+              ].map((loc) => (
+                <div key={loc.city} className="bg-ink p-6">
+                  <MapPin className="w-4 h-4 text-signal" strokeWidth={1.5} />
+                  <div className="mt-4 font-display text-xl text-bone">
+                    {loc.city}
+                  </div>
+                  <div className="mt-1 font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone-dim">
+                    {loc.note}
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-[#0F172A]">Email</p>
-                  <p className="text-sm text-[#475569]">contact@archeon.solutions</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-lg bg-[#F1F5F9] flex items-center justify-center">
-                  <MapPin className="w-4 h-4 text-[#475569]" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-[#0F172A]">Location</p>
-                  <p className="text-sm text-[#475569]">
-                    Zurich, Switzerland & San Francisco, CA
-                  </p>
-                </div>
-              </div>
+              ))}
+            </div>
+
+            <div className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone-dim leading-relaxed">
+              Available globally — engagements delivered on-prem,
+              hybrid or air-gapped as your compliance requires.
             </div>
           </motion.div>
 
-          {/* Form */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
+          {/* Right — form */}
+          <motion.form
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ duration: 0.6, ease, delay: 0.1 }}
+            onSubmit={handleSubmit}
+            data-testid="contact-form"
+            className="col-span-12 lg:col-span-7 space-y-8"
           >
-            <form
-              onSubmit={handleSubmit}
-              data-testid="contact-form"
-              className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-8 space-y-5"
-            >
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="text-sm font-medium text-[#0F172A] mb-1.5 block"
-                  >
-                    Name *
-                  </label>
-                  <Input
-                    id="name"
-                    name="name"
-                    data-testid="contact-name-input"
-                    placeholder="Your name"
-                    value={form.name}
-                    onChange={handleChange}
-                    className="bg-white border-[#E2E8F0]"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="text-sm font-medium text-[#0F172A] mb-1.5 block"
-                  >
-                    Email *
-                  </label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    data-testid="contact-email-input"
-                    placeholder="you@company.com"
-                    value={form.email}
-                    onChange={handleChange}
-                    className="bg-white border-[#E2E8F0]"
-                  />
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8">
+              <div>
+                <label
+                  htmlFor="name"
+                  className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone-dim"
+                >
+                  Name *
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  data-testid="contact-name-input"
+                  placeholder="Your name"
+                  value={form.name}
+                  onChange={handleChange}
+                  className="field-underline"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="email"
+                  className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone-dim"
+                >
+                  Work email *
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  data-testid="contact-email-input"
+                  placeholder="you@company.com"
+                  value={form.email}
+                  onChange={handleChange}
+                  className="field-underline"
+                />
               </div>
               <div>
                 <label
                   htmlFor="company"
-                  className="text-sm font-medium text-[#0F172A] mb-1.5 block"
+                  className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone-dim"
                 >
                   Company
                 </label>
-                <Input
+                <input
                   id="company"
                   name="company"
                   data-testid="contact-company-input"
-                  placeholder="Your company (optional)"
+                  placeholder="Organization"
                   value={form.company}
                   onChange={handleChange}
-                  className="bg-white border-[#E2E8F0]"
+                  className="field-underline"
                 />
               </div>
               <div>
                 <label
-                  htmlFor="message"
-                  className="text-sm font-medium text-[#0F172A] mb-1.5 block"
+                  htmlFor="vertical"
+                  className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone-dim"
                 >
-                  Message *
+                  Vertical
                 </label>
-                <Textarea
-                  id="message"
-                  name="message"
-                  data-testid="contact-message-input"
-                  placeholder="Tell us about your project..."
-                  rows={5}
-                  value={form.message}
+                <select
+                  id="vertical"
+                  name="vertical"
+                  data-testid="contact-vertical-input"
+                  value={form.vertical}
                   onChange={handleChange}
-                  className="bg-white border-[#E2E8F0] resize-none"
-                />
+                  className="field-underline bg-transparent appearance-none cursor-pointer"
+                >
+                  {verticals.map((v) => (
+                    <option key={v} value={v} className="bg-ink text-bone">
+                      {v}
+                    </option>
+                  ))}
+                </select>
               </div>
-              <Button
+            </div>
+
+            <div>
+              <label
+                htmlFor="message"
+                className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone-dim"
+              >
+                What are you trying to solve? *
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                data-testid="contact-message-input"
+                placeholder="A specific problem, a model that's stuck, a system that needs to ship..."
+                rows={4}
+                value={form.message}
+                onChange={handleChange}
+                className="field-underline resize-none"
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-6 pt-2">
+              <p className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone-dim max-w-xs">
+                {status === "sent" &&
+                  "Received. We respond within one business day."}
+                {status === "error" &&
+                  "Please complete required fields and try again."}
+                {status === "idle" &&
+                  "We respond within one business day · NDA on request"}
+                {status === "sending" && "Sending…"}
+              </p>
+              <button
                 type="submit"
                 data-testid="contact-submit-btn"
-                disabled={loading}
-                className="w-full bg-[#0F172A] hover:bg-[#1E293B] text-white rounded-full h-11 text-sm font-medium"
+                disabled={status === "sending"}
+                className="group inline-flex items-center gap-3 bg-signal text-ink px-7 h-12 text-sm font-medium hover:bg-bone transition-colors disabled:opacity-60"
               >
-                {loading ? (
-                  "Sending..."
-                ) : (
-                  <>
-                    Send Message
-                    <Send className="w-4 h-4 ml-2" />
-                  </>
-                )}
-              </Button>
-            </form>
-          </motion.div>
+                {status === "sending" ? "Sending…" : "Send brief"}
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </button>
+            </div>
+          </motion.form>
         </div>
       </div>
     </section>

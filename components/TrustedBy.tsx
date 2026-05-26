@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Image from "next/image";
 
 type Client = {
@@ -14,51 +11,62 @@ type Props = { clients: Client[] };
 
 export default function TrustedBy({ clients }: Props) {
   if (!clients.length) return null;
+
+  // Duplicate the list so the marquee loops seamlessly.
+  const reel = [...clients, ...clients];
+
   return (
     <section
       id="trusted-by"
       data-testid="trusted-by-section"
-      className="py-16 md:py-20 bg-[#0F172A] border-b border-white/5"
+      aria-label="Selected engagements"
+      className="relative bg-ink border-y border-ink-3"
     >
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-10 md:mb-12"
-        >
-          <span className="font-mono text-xs tracking-[0.2em] text-[#2563EB] uppercase">
-            Trusted by
+      <div className="max-w-[88rem] mx-auto px-6 md:px-10 py-10 md:py-12">
+        <div className="flex items-center gap-6">
+          <span className="eyebrow shrink-0 hidden sm:inline-flex items-center gap-3">
+            <span aria-hidden className="text-bone-dim">003</span>
+            <span aria-hidden className="inline-block w-6 h-px bg-signal/60" />
+            Selected engagements
           </span>
-          <p className="mt-3 text-sm md:text-base text-white/50 max-w-xl mx-auto">
-            Selected engagements with global technology and healthcare leaders.
-          </p>
-        </motion.div>
+          <div className="hidden sm:block flex-1 h-px bg-ink-3" />
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex flex-wrap items-center justify-center gap-x-12 gap-y-8 md:gap-x-20"
-        >
-          {clients.map((c) => (
-            <div
-              key={c.id}
-              className="flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity duration-300"
-              style={{ height: c.height }}
-            >
-              <Image
-                src={c.logoUrl}
-                alt={c.name}
-                width={200}
-                height={c.height}
-                className="h-full w-auto object-contain"
-              />
-            </div>
-          ))}
-        </motion.div>
+        <div className="mt-8 marquee-pause overflow-hidden relative">
+          {/* edge fades */}
+          <div
+            className="absolute inset-y-0 left-0 w-16 z-10 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(to right, var(--ink), transparent)",
+            }}
+          />
+          <div
+            className="absolute inset-y-0 right-0 w-16 z-10 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(to left, var(--ink), transparent)",
+            }}
+          />
+          <div className="marquee-track flex w-max items-center gap-x-20 md:gap-x-28">
+            {reel.map((c, i) => (
+              <div
+                key={`${c.id}-${i}`}
+                className="flex items-center justify-center opacity-55 hover:opacity-100 transition-opacity duration-300"
+                style={{ height: c.height }}
+              >
+                <Image
+                  src={c.logoUrl}
+                  alt={c.name}
+                  width={220}
+                  height={c.height}
+                  className="h-full w-auto object-contain"
+                  style={{ filter: "brightness(0) invert(1)" }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

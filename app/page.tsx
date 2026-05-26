@@ -1,8 +1,11 @@
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import TrustedBy from '@/components/TrustedBy';
+import Manifesto from '@/components/Manifesto';
 import Services from '@/components/Services';
+import Industries from '@/components/Industries';
 import CaseStudies from '@/components/CaseStudies';
+import Credentials from '@/components/Credentials';
 import About from '@/components/About';
 import AcademicAffiliations from '@/components/AcademicAffiliations';
 import Testimonials from '@/components/Testimonials';
@@ -21,6 +24,7 @@ import {
 import {
   fallbackAffiliations,
   fallbackClients,
+  fallbackIndustries,
   fallbackProjects,
   fallbackServices,
   fallbackStats,
@@ -91,7 +95,7 @@ export default async function Home() {
     services.length > 0
       ? services.map((s) => {
           const sv = s as { id: string | number; title: string; summary: string; icon: string; span?: string };
-          return { id: sv.id, title: sv.title, summary: sv.summary, icon: sv.icon, span: sv.span ?? 'md:col-span-1' };
+          return { id: sv.id, title: sv.title, summary: sv.summary, icon: sv.icon, span: sv.span ?? 'md:col-span-2' };
         })
       : fallbackServices;
 
@@ -103,7 +107,7 @@ export default async function Home() {
             id: cl.id,
             name: cl.name,
             logoUrl: mediaUrl(cl.logo) ?? '',
-            height: cl.height ?? 36,
+            height: cl.height ?? 28,
           };
         })
       : fallbackClients;
@@ -138,12 +142,15 @@ export default async function Home() {
   const stats = homepageData?.stats?.length ? homepageData.stats : fallbackStats;
 
   return (
-    <div className="App">
+    <main className="relative bg-ink text-bone">
       <Header />
       <Hero />
       <TrustedBy clients={clientsForHome} />
+      <Manifesto />
       <Services services={servicesForHome} />
+      <Industries industries={fallbackIndustries} />
       <CaseStudies projects={projectsForHome} />
+      <Credentials />
       <About
         team={teamForHome}
         stats={stats}
@@ -154,6 +161,6 @@ export default async function Home() {
       <Testimonials testimonials={testimonialsForHome} />
       <Contact />
       <Footer />
-    </div>
+    </main>
   );
 }

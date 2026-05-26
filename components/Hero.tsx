@@ -1,221 +1,182 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight, ArrowDown } from "lucide-react";
+import dynamic from "next/dynamic";
 
-const slides = [
-  {
-    id: 1,
-    title: "Hyperspectral Intelligence",
-    subtitle: "Heavy Metal Detection via Earth Observation",
-    description:
-      "Pioneering analysis of hyperspectral satellite imagery to detect and map heavy metal contamination across vast terrains with unprecedented accuracy.",
-    tag: "REMOTE SENSING",
-    image:
-      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80",
-  },
-  {
-    id: 2,
-    title: "Super-Resolution AI",
-    subtitle: "Diffusion Models for CT Scan Enhancement",
-    description:
-      "Custom diffusion architectures achieving state-of-the-art super-resolution and denoising on medical CT scans, enabling earlier and more precise diagnostics.",
-    tag: "MEDICAL IMAGING",
-    image:
-      "https://images.unsplash.com/photo-1666214280250-41f16ba24a26?auto=format&fit=crop&w=1920&q=80",
-  },
-  {
-    id: 3,
-    title: "Live Endometriosis Detection",
-    subtitle: "Real-Time Surgical Video Analysis",
-    description:
-      "SOTA deep learning models deployed for real-time intraoperative detection of endometriosis lesions during laparoscopic surgery.",
-    tag: "HEALTHCARE AI",
-    image:
-      "https://images.unsplash.com/photo-1757152962882-6bf8495b324d?auto=format&fit=crop&w=1920&q=80",
-  },
-  {
-    id: 4,
-    title: "DeepSeek V3 Inference",
-    subtitle: "World Record Performance Optimization",
-    description:
-      "Achieved world-record inference speeds on DeepSeek V3 through custom kernel optimization, quantization strategies, and distributed systems engineering.",
-    tag: "LLM OPTIMIZATION",
-    image:
-      "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1920&q=80",
-  },
+const SignalField = dynamic(() => import("./hero/SignalField"), {
+  ssr: false,
+  loading: () => null,
+});
+
+const chips = [
+  "COMPUTER VISION",
+  "LLM OPTIMIZATION",
+  "HEALTHCARE",
+  "FINANCE",
+  "R&D",
 ];
 
+const ease = [0.2, 0.7, 0.1, 1] as const;
+
 export default function Hero() {
-  const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(1);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-  const startAutoplay = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      setDirection(1);
-      setCurrent((prev) => (prev + 1) % slides.length);
-    }, 6000);
-  }, []);
-
-  useEffect(() => {
-    startAutoplay();
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [startAutoplay]);
-
-  const goTo = useCallback(
-    (index: number) => {
-      setDirection(index > current ? 1 : -1);
-      setCurrent(index);
-      startAutoplay();
-    },
-    [current, startAutoplay]
-  );
-
-  const goPrev = useCallback(() => {
-    setDirection(-1);
-    setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
-    startAutoplay();
-  }, [startAutoplay]);
-
-  const goNext = useCallback(() => {
-    setDirection(1);
-    setCurrent((prev) => (prev + 1) % slides.length);
-    startAutoplay();
-  }, [startAutoplay]);
-
-  const slide = slides[current];
-
-  const imageVariants = {
-    enter: { opacity: 0, scale: 1.08 },
-    center: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] as const } },
-    exit: { opacity: 0, scale: 0.98, transition: { duration: 0.5 } },
-  };
-
-  const textVariants = {
-    enter: (dir: number) => ({ opacity: 0, y: dir > 0 ? 40 : -40 }),
-    center: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] as const } },
-    exit: (dir: number) => ({ opacity: 0, y: dir > 0 ? -30 : 30, transition: { duration: 0.3 } }),
-  };
-
   return (
     <section
       id="hero"
-      data-testid="hero-carousel"
-      className="relative w-full h-screen overflow-hidden bg-[#0A0A0A]"
+      data-testid="hero-section"
+      className="relative isolate w-full min-h-screen overflow-hidden bg-ink"
     >
-      {/* Background Images */}
-      <AnimatePresence mode="wait" custom={direction}>
-        <motion.div
-          key={slide.id}
-          custom={direction}
-          variants={imageVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          className="absolute inset-0"
-        >
-          <img
-            src={slide.image}
-            alt={slide.title}
-            className="w-full h-full object-cover"
-          />
-          <div className="slide-overlay absolute inset-0" />
-        </motion.div>
-      </AnimatePresence>
+      {/* Backdrop layers */}
+      <div className="absolute inset-0 z-0">
+        <SignalField />
+        {/* Vignette to anchor the text */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(120% 80% at 25% 90%, color-mix(in oklch, var(--ink) 88%, transparent) 0%, color-mix(in oklch, var(--ink) 50%, transparent) 45%, transparent 75%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to bottom, color-mix(in oklch, var(--ink) 65%, transparent) 0%, transparent 30%, transparent 60%, color-mix(in oklch, var(--ink) 92%, transparent) 100%)",
+          }}
+        />
+      </div>
 
-      {/* Content */}
-      <div className="relative z-10 h-full flex flex-col justify-end pb-24 md:pb-32">
-        <div className="max-w-7xl mx-auto px-6 w-full">
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={slide.id}
-              custom={direction}
-              variants={textVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              className="max-w-2xl"
+      {/* Top meta band */}
+      <div className="relative z-10 pt-28 md:pt-32">
+        <div className="max-w-[88rem] mx-auto px-6 md:px-10 flex items-start justify-between gap-6">
+          <motion.span
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease }}
+            className="eyebrow"
+          >
+            <span aria-hidden className="text-bone-dim">001</span>
+            <span className="mx-3 inline-block w-6 h-px bg-signal/60 align-middle" />
+            ARCHEON SOLUTIONS · SF / ZÜRICH · EST. 2026
+          </motion.span>
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease, delay: 0.08 }}
+            className="hidden md:flex flex-col items-end gap-1 font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone-dim"
+          >
+            <span>N 47°22′ · W 122°25′</span>
+            <span className="text-signal">SYSTEMS ONLINE</span>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Headline block */}
+      <div className="relative z-10 flex-1 flex items-end pb-24 md:pb-32 mt-24 md:mt-40">
+        <div className="max-w-[88rem] mx-auto px-6 md:px-10 w-full grid grid-cols-12 gap-6">
+          <div className="col-span-12 lg:col-span-9">
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, ease, delay: 0.12 }}
+              className="h-display text-bone"
             >
-              <span
-                data-testid="hero-slide-tag"
-                className="font-mono text-xs tracking-[0.2em] text-[#2563EB] mb-4 block"
-              >
-                {slide.tag}
-              </span>
-              <h1
-                data-testid="hero-slide-title"
-                className="font-heading text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-3 leading-[1.1]"
-              >
-                {slide.title}
-              </h1>
-              <p
-                data-testid="hero-slide-subtitle"
-                className="font-heading text-lg md:text-xl text-white/80 font-medium mb-4"
-              >
-                {slide.subtitle}
-              </p>
-              <p
-                data-testid="hero-slide-description"
-                className="text-sm md:text-base text-white/60 leading-relaxed max-w-lg mb-8"
-              >
-                {slide.description}
-              </p>
+              Research-grade AI,
+              <br />
+              <span className="signal-mark">shipped</span> into production.
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease, delay: 0.32 }}
+              className="mt-8 max-w-2xl text-base md:text-lg text-bone-dim leading-relaxed"
+            >
+              We are an AI research and engineering studio for tier-1 banks,
+              insurers and industrial leaders. Built by scientists with
+              world-record inference, published medical research, and operator
+              experience at NVIDIA, Siemens Healthineers and JP Morgan — not
+              prompt engineers.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease, delay: 0.44 }}
+              className="mt-10 flex flex-wrap gap-2"
+            >
+              {chips.map((c) => (
+                <span
+                  key={c}
+                  className="font-mono text-[0.6875rem] tracking-[0.18em] uppercase text-bone-dim border border-ink-3 px-3 py-1.5 hover:border-signal/60 hover:text-bone transition-colors"
+                >
+                  {c}
+                </span>
+              ))}
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease, delay: 0.56 }}
+              className="mt-12 flex flex-wrap items-center gap-4"
+            >
               <a
                 href="#contact"
-                data-testid="hero-cta-btn"
+                data-testid="hero-cta-primary"
                 onClick={(e) => {
                   e.preventDefault();
-                  document.querySelector("#contact")?.scrollIntoView({ behavior: "smooth" });
+                  document
+                    .querySelector("#contact")
+                    ?.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="inline-flex items-center gap-2 bg-white text-[#0F172A] px-6 py-3 rounded-full text-sm font-semibold hover:bg-white/90 transition-colors"
+                className="group inline-flex items-center gap-3 bg-signal text-ink px-6 h-12 text-sm font-medium tracking-tight hover:bg-bone transition-colors"
               >
-                Explore Project
-                <ArrowRight className="w-4 h-4" />
+                Book an intro call
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </a>
+              <a
+                href="#case-studies"
+                data-testid="hero-cta-secondary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document
+                    .querySelector("#case-studies")
+                    ?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="group inline-flex items-center gap-3 text-bone px-2 h-12 text-sm hover:text-signal transition-colors"
+              >
+                See the work
+                <span aria-hidden className="inline-block w-8 h-px bg-current transition-all group-hover:w-12" />
               </a>
             </motion.div>
-          </AnimatePresence>
-
-          {/* Slide indicators + navigation */}
-          <div className="flex items-center justify-between mt-12">
-            <div className="flex items-center gap-2" data-testid="carousel-indicators">
-              {slides.map((_, idx) => (
-                <button
-                  key={idx}
-                  data-testid={`carousel-dot-${idx}`}
-                  onClick={() => goTo(idx)}
-                  className={`carousel-dot rounded-full ${idx === current ? "active" : ""}`}
-                  aria-label={`Go to slide ${idx + 1}`}
-                />
-              ))}
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="font-mono text-xs text-white/50 mr-2">
-                {String(current + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
-              </span>
-              <button
-                data-testid="carousel-prev-btn"
-                onClick={goPrev}
-                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/50 transition-colors"
-                aria-label="Previous slide"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button
-                data-testid="carousel-next-btn"
-                onClick={goNext}
-                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/60 hover:text-white hover:border-white/50 transition-colors"
-                aria-label="Next slide"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
-            </div>
           </div>
+
+          {/* Right index */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease, delay: 0.36 }}
+            className="hidden lg:flex col-span-3 flex-col items-end justify-end gap-4 pb-2"
+          >
+            <div className="border border-ink-3 px-5 py-4 backdrop-blur-sm bg-ink/40 max-w-[18rem]">
+              <div className="eyebrow mb-2">Benchmark</div>
+              <div className="h-sub text-bone">World record</div>
+              <p className="mt-2 text-sm text-bone-dim leading-snug">
+                DeepSeek V3 inference throughput — open-source, reproducible.
+              </p>
+            </div>
+            <div className="font-mono text-[0.6875rem] uppercase tracking-[0.18em] text-bone-dim flex items-center gap-2">
+              <span className="inline-block w-2 h-2 bg-signal animate-pulse" />
+              Now accepting Q3 engagements
+            </div>
+          </motion.div>
         </div>
+      </div>
+
+      {/* Bottom indicator */}
+      <div className="absolute z-10 bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 text-bone-dim font-mono text-[0.6875rem] uppercase tracking-[0.18em]">
+        <ArrowDown className="w-3.5 h-3.5" /> Scroll
       </div>
     </section>
   );

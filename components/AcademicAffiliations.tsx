@@ -1,7 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
+import { motion } from "framer-motion";
+import Eyebrow from "@/components/ui/Eyebrow";
 
 type Institution = {
   id: string | number;
@@ -12,57 +13,49 @@ type Institution = {
 
 type Props = { institutions: Institution[] };
 
+const ease = [0.2, 0.7, 0.1, 1] as const;
+
 export default function AcademicAffiliations({ institutions }: Props) {
   if (!institutions.length) return null;
   return (
     <section
       id="academic-affiliations"
       data-testid="academic-affiliations-section"
-      className="py-20 md:py-24 bg-white border-y border-slate-100"
+      className="bg-ink border-b border-ink-3"
     >
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-[88rem] mx-auto px-6 md:px-10 py-20 md:py-24">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-12 md:mb-14"
+          transition={{ duration: 0.6, ease }}
+          className="grid grid-cols-12 gap-x-6 gap-y-10 items-center"
         >
-          <span className="font-mono text-xs tracking-[0.2em] text-[#2563EB] uppercase">
-            Academic Affiliations
-          </span>
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-[#0F172A] mt-4">
-            Research-grade engineering, rooted in academia.
-          </h2>
-          <p className="mt-4 text-sm md:text-base text-slate-500 max-w-2xl mx-auto">
-            Our engineers hold advanced degrees and research backgrounds from
-            world-leading institutions, bringing scientific rigor to every
-            engagement.
-          </p>
-        </motion.div>
+          <div className="col-span-12 md:col-span-4">
+            <Eyebrow index="009" label="Research network" />
+            <p className="mt-5 font-display text-xl md:text-2xl text-bone leading-snug max-w-sm">
+              Active collaborations with research groups at Berkeley, Harvard and UCL.
+            </p>
+          </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex flex-wrap items-center justify-center gap-x-16 gap-y-10 md:gap-x-24"
-        >
-          {institutions.map((inst) => (
-            <div
-              key={inst.id}
-              className="flex items-center justify-center opacity-80 hover:opacity-100 transition-opacity duration-300"
-              style={{ height: inst.height }}
-            >
-              <Image
-                src={inst.logoUrl}
-                alt={inst.name}
-                width={240}
-                height={inst.height}
-                className="h-full w-auto object-contain"
-              />
-            </div>
-          ))}
+          <div className="col-span-12 md:col-span-8 flex flex-wrap items-center justify-start md:justify-end gap-x-14 gap-y-8 md:gap-x-20">
+            {institutions.map((inst) => (
+              <div
+                key={inst.id}
+                className="flex items-center justify-center opacity-55 hover:opacity-100 transition-opacity duration-300"
+                style={{ height: inst.height }}
+              >
+                <Image
+                  src={inst.logoUrl}
+                  alt={inst.name}
+                  width={220}
+                  height={inst.height}
+                  className="h-full w-auto object-contain"
+                  style={{ filter: "brightness(0) invert(1)" }}
+                />
+              </div>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>
