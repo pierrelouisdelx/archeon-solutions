@@ -30,10 +30,10 @@ const team = [
 ];
 
 const stats = [
-  { value: "50+", label: "Projects Delivered" },
-  { value: "12", label: "Research Papers" },
-  { value: "4", label: "World Records" },
-  { value: "98%", label: "Client Retention" },
+  { value: "10+", label: "Projects Delivered" },
+  { value: "2", label: "Research Papers" },
+  { value: "1", label: "World Record" },
+  { value: "100%", label: "Client Retention" },
 ];
 
 export default function About() {
