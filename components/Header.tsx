@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import Image from "next/image";
+import Logo from "@/components/Logo";
 
 const navLinks = [
   { label: "Services", href: "#services" },
@@ -53,7 +53,7 @@ export default function Header() {
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
         >
-          <Image src="/logo.svg" alt="Archeon Solutions" width={32} height={32} />
+          <Logo variant={scrolled ? "dark" : "light"} />
           <span className={`font-heading font-bold text-lg tracking-tight ${scrolled ? "text-[#0F172A]" : "text-white"}`}>
             Archeon Solutions
           </span>
