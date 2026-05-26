@@ -88,9 +88,8 @@ export const fallbackServices = [
   { id: 'fb-cv', icon: 'Eye', title: 'Computer Vision', summary: 'From object detection to image segmentation, we build production-grade vision systems for industrial, medical, and earth observation applications.', span: 'md:col-span-2' },
   { id: 'fb-llm', icon: 'Brain', title: 'LLM Optimization', summary: 'Inference acceleration, quantization, and distributed deployment strategies that push language models to their performance limits.', span: 'md:col-span-1' },
   { id: 'fb-hai', icon: 'HeartPulse', title: 'Healthcare AI', summary: 'FDA-aware AI solutions for diagnostics, surgical assistance, and medical imaging that meet the highest standards of clinical reliability.', span: 'md:col-span-1' },
-  { id: 'fb-hyp', icon: 'Microscope', title: 'Hyperspectral Analysis', summary: 'Advanced spectral imaging pipelines for earth observation, mineral detection, and environmental monitoring at scale.', span: 'md:col-span-1' },
   { id: 'fb-mlo', icon: 'Cpu', title: 'MLOps & Deployment', summary: 'End-to-end ML infrastructure: from experiment tracking and model registry to scalable inference endpoints and monitoring.', span: 'md:col-span-1' },
-  { id: 'fb-rnd', icon: 'BarChart3', title: 'Research & Development', summary: 'Cutting-edge research partnerships. We collaborate with institutions to bring novel AI methods from paper to production.', span: 'md:col-span-2' },
+  { id: 'fb-rnd', icon: 'BarChart3', title: 'Research & Development', summary: 'Cutting-edge research partnerships. We collaborate with institutions to bring novel AI methods from paper to production.', span: 'md:col-span-3' },
 ];
 
 export const fallbackClients = [

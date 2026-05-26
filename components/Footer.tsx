@@ -1,9 +1,9 @@
 import { Separator } from "@/components/ui/separator";
 
 const footerLinks = {
-  Services: ["Computer Vision", "LLM Optimization", "Healthcare AI", "Hyperspectral Analysis"],
-  Company: ["About", "Careers", "Research", "Blog"],
-  Legal: ["Privacy Policy", "Terms of Service", "Cookie Policy"],
+  Services: ["Computer Vision", "LLM Optimization", "Healthcare AI", "Research & Development"],
+  Company: ["About", "Blog"],
+  Legal: ["Privacy Policy", "Terms of Service"],
 };
 
 export default function Footer() {
